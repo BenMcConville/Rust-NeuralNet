@@ -36,10 +36,8 @@ impl DenseLayer  {
     }
     pub fn propagate_layer(&self, input: &Vec<Vec<f32>>) -> Vec<Vec<f32>>  {
         let mut new_matrix = matrixmath::matrix_mul(&input, &self.weights);
-        println!("Weights: {:?}", &self.weights);
-        println!("Here: {:?}", &input);
-        //new_matrix = matrixmath::matrix_add(&new_matrix, &self.bias);
-        //new_matrix = activation_function_loop(&new_matrix);
+        new_matrix = matrixmath::matrix_add(&new_matrix, &self.bias);
+        new_matrix = activation_function_loop(&new_matrix);
         new_matrix
     }
 
@@ -50,10 +48,14 @@ impl DenseLayer  {
         println!("{:?}", self.bias);
     }
 }
-fn activation_function_loop(a: &Vec<f32>) -> Vec<f32>    {
-        let mut new_matrix: Vec<f32> = vec![];
+fn activation_function_loop(a: &Vec<Vec<f32>>) -> Vec<Vec<f32>>    {
+        let mut new_matrix: Vec<Vec<f32>> = vec![];
         for i in a {
-           new_matrix.push(activation_function(*i)); 
+            let mut new_layer: Vec<f32> = vec![];
+            for j in i  {
+                new_layer.push(activation_function(*j)); 
+            }
+            new_matrix.push(new_layer);
         }
         new_matrix
 }
